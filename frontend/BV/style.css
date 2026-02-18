@@ -223,3 +223,20 @@ button:disabled {
     pointer-events: none; /* Allow clicks to pass through to the form */
     z-index: 1; /* Background layer: Above Chakra (z-1) but behind Scroll (z-10) */
 }
+.back-btn {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  text-decoration: none;
+  background: #D4AF37;
+  color: black;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-weight: 600;
+  z-index: 999;
+  transition: 0.3s;
+}
+
+.back-btn:hover {
+  background: #b9972e;
+}
