@@ -31,32 +31,83 @@
         .navbar {
             background: transparent;
             transition: 0.3s ease;
+            padding: 0.8rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
         }
 
         .navbar.scrolled {
             background: white;
             box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+            padding: 0.6rem 0;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 1rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #D4AF37;
+            font-family: var(--font-title);
+            letter-spacing: 1px;
+        }
+
+        .navbar.scrolled .logo {
+            color: #8B5E3C;
+        }
+
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 2.5rem;
+        }
+
+        .navbar nav {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
         }
 
         .navbar nav a {
-            color: rgba(255, 255, 255, 0.9) !important;
+            color: #FFD700 !important;
             text-decoration: none;
-            font-weight: 500;
-            transition: 0.3s;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            position: relative;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8), 0 0 12px rgba(255, 215, 0, 0.4);
+        }
+
+        .navbar nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #FFFF00;
+            transition: width 0.3s ease;
+        }
+
+        .navbar nav a:hover::after {
+            width: 100%;
         }
 
         .navbar.scrolled nav a {
-            color: #8B5E3C !important;
+            color: #D4AF37 !important;
+            text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
         }
 
         .navbar nav a:hover,
         .navbar nav a.active {
-            color: #D4AF37 !important;
-        }
-
-        .navbar .logo {
-            color: #D4AF37;
-            font-weight: 700;
+            color: #FFFF00 !important;
+            text-shadow: 0 0 12px rgba(255, 255, 0, 1), 0 2px 6px rgba(0, 0, 0, 0.8);
         }
 
         /* Button styles for transparent navbar */
@@ -610,6 +661,7 @@
         <div class="container nav-content">
             <div class="logo">Bhagavad Gītā</div>
             <div class="right-section">
+                <nav>
                 <a href="../../DASHBOARD/index.html">Home</a>
                     <a href="../../DASHBOARD/index.html#about">About</a>
                     <a href="chapters.html">Chapters</a>

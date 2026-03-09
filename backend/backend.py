@@ -9,6 +9,7 @@ import os
 import re
 import unicodedata
 import uuid
+import difflib
 
 # ---------------- CONFIG ----------------
 
@@ -174,26 +175,48 @@ def get_meaning(payload: ShlokaRequest):
 
     norm_input = normalize(shloka)
 
+    best_match = None
+    best_ratio = 0.0
+
     for verse in VERSES:
-        if normalize(verse["sanskrit"]["text"]) == norm_input:
+        stored_norm = normalize(verse["sanskrit"]["text"])
+        ratio = difflib.SequenceMatcher(None, norm_input, stored_norm).ratio()
+        if ratio > best_ratio:
+            best_ratio = ratio
+            best_match = verse
 
-            if language == "english":
-                text = verse["translations"]["english"]["text"]
-            elif language == "hindi":
-                text = verse["translations"]["hindi"]["text"]
-            else:
-                text = translate(
-                    verse["translations"]["hindi"]["text"],
-                    LANG_CODES[language]
-                )
+    if best_ratio > 0.9:  # 90% similarity threshold
+        verse = best_match
 
-            # ✅ THIS RETURN WAS MISSING
-            return {
-                "chapter": verse["chapter"],
-                "verse": verse["verse"],
-                "language": language,
-                "text": text
-            }
+        if language == "english":
+            text = verse["translations"]["english"]["text"]
+        elif language == "hindi":
+            text = verse["translations"]["hindi"]["text"]
+        else:
+            text = translate(
+                verse["translations"]["english"]["text"],
+                LANG_CODES[language]
+            )
+
+        # ✅ THIS RETURN WAS MISSING
+        return {
+            "chapter": verse["chapter"],
+            "verse": verse["verse"],
+            "language": language,
+            "text": text
+        }
 
     # Only reached if NO match found
-    return {"error": "Shloka not found"}
+    error_message_en = "I'm sorry, but the requested verse could not be found in our Bhagavad Gita collection. Please verify the verse text or chapter and verse number."
+    if language == "english":
+        text = error_message_en
+    elif language == "hindi":
+        text = translate(error_message_en, "hi")
+    else:
+        text = translate(error_message_en, LANG_CODES[language])
+    return {
+        "chapter": None,
+        "verse": None,
+        "language": language,
+        "text": text
+    }
